@@ -1,0 +1,63 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SynLab Ryerson PCP Website Version 0.1</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <form id="inputform" name="inputform" action="form_action.asp">
+      Latitude: <input id="lat" type="text" name="lat"><br>
+      Longitude: <input id="long" type="text" name="long"><br><br>
+      <input type="submit" value="Submit">
+    </form>
+
+    <style>
+      #map {
+        height: 80%;
+        width: 80%;
+      }
+
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="map"</div>
+    <script>
+      //make a new google map and center it on Rye High
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 43.657971955708206, lng: -79.3789404630661},
+          zoom: 18
+        });
+
+        var marker = new google.maps.Marker({
+          map: map
+        });
+        //Grab the location of the click and enter it into the form
+        google.maps.event.addListener(map, "click", function(e) {
+          latitude = e.latLng.lat();
+          longitude = e.latLng.lng();
+          //console.log(latitude + ', ' + longitude);
+          document.getElementById("lat").value = latitude;
+          document.getElementById("long").value = longitude;
+          marker.setPosition(e.latLng);
+          placeMarker(e.latLng);
+        });
+
+        function placeMarker(location) {
+          //marker.setPositon(location);
+        }
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=APIHERE&callback=initMap&sensor=false"
+    async defer></script>
+  </body>
+</html>
