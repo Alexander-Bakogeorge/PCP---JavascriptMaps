@@ -1,36 +1,150 @@
 
+<!-- code for sliding checkbox: https://paulund.co.uk/style-checkboxes-with-css -->
 
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SynLab Ryerson PCP Website Version 0.1</title>
+    <title>SynLab Ryerson PCP Website Version 0.2</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
-    <form id="inputform" name="inputform" action="form_action.asp">
-      Latitude: <input id="lat" type="text" name="lat"><br>
-      Longitude: <input id="long" type="text" name="long"><br><br>
-      <input type="submit" value="Submit">
-    </form>
+
 
     <style>
       #map {
-        height: 80%;
+        height: 50%;
         width: 80%;
+        margin: auto auto;
       }
 
       html, body {
         height: 100%;
-        margin: 0;
         padding: 0;
+        margin: 0;
+        background-color: black;
       }
 
+      #inputform2 {
+        width: 20%;
+        margin-left: 40%;
+        margin-right: 50%;
+      }
+
+      #submitform {
+        width: 50%;
+        margin: 0 auto;
+        clear:both;
+        text-align: center;
+      }
+
+      input[type=checkbox] {
+	       visibility: hidden;
+       }
+
+      .checkboxOne {
+        float: left;
+        width: 40px;
+	      height: 10px;
+	      background: #555;
+        margin: 10px 80px;
+        position: relative;
+        border-radius: 3px;
+        clear:both;
+      }
+
+      .checkboxOne label {
+	      display: block;
+	      width: 16px;
+	      height: 16px;
+	      border-radius: 50%;
+
+	      transition: all .5s ease;
+	      cursor: pointer;
+	      position: absolute;
+	      top: -3px;
+	      left: -3px;
+
+        background: #ccc;
+      }
+
+      .checkboxOne input[type=checkbox]:checked + label {
+        left: 27px;
+      }
+
+      #goodBox:before {
+        content: 'Good';
+        position: absolute;
+        top: -5px;
+        right: 60px;
+        height: 0px;
+        font-size: 16px;
+      }
+
+      #badBox:before {
+        content: 'Bad';
+        position: absolute;
+        top: -5px;
+        right: 60px;
+        height: 0px;
+        font-size: 16px;
+      }
+
+      #otherBox:before {
+        content: 'Other';
+        position: absolute;
+        top: -5px;
+        right: 60px;
+        height: 0px;
+        font-size: 16px;
+      }
+      #wrapper {
+        background-color: darkgrey;
+        width: 60%;
+        height: 100%;
+        margin: 0 auto;
+      }
+      #title {
+        margin: 0 auto;
+        width: 40%;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
-    <div id="map"</div>
+
+    <div id="wrapper">
+      <h2 id="title">Ryerson Campus Planning</h2>
+
+      <form id="inputform2">
+        <div id="goodBox" class="checkboxOne">
+          <input id="good" type="checkbox" name="issue" value="Good" onclick="buttonCheck(1)" value="0" />
+          <label for="good"></label>
+        </div>
+
+        <div id="badBox" class="checkboxOne">
+          <input id="bad" type="checkbox" name="issue" value="Bad" onclick="buttonCheck(2)" value="0" />
+          <label for="bad"></label>
+        </div>
+
+        <div id="otherBox" class="checkboxOne clear="both"">
+          <input id="other" type="checkbox" name="issue" value="Other" onclick="buttonCheck(3)" value="0"/>
+          <label for="other"></label>
+        </div><br>
+
+        <br>Comment:<br><input type="text" name="comment" text-align="center"><br><br>
+      </form>
+
+      <div id="map"></div>
+
+      <form id="submitform">
+        <br><input type="submit" value="Submit">
+      </form>
+    </div>
+
+
     <script>
       //make a new google map and center it on Rye High
       var map;
+      var inputType = 10;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 43.657971955708206, lng: -79.3789404630661},
@@ -45,11 +159,44 @@
           latitude = e.latLng.lat();
           longitude = e.latLng.lng();
           //console.log(latitude + ', ' + longitude);
-          document.getElementById("lat").value = latitude;
-          document.getElementById("long").value = longitude;
-          marker.setPosition(e.latLng);
+          //document.getElementById("lat").value = latitude;
+          //document.getElementById("long").value = longitude;
+
+          if(inputType == 1){
+            marker.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+            marker.setPosition(e.latLng);
+          }
+          else if(inputType == 2){
+            marker.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+            marker.setPosition(e.latLng);
+          }
+          else if(inputType == 3){
+            marker.setIcon("http://maps.google.com/mapfiles/ms/icons/yellow-dot.png")
+            marker.setPosition(e.latLng);
+          }
+          else {
+            alert("Please pick between good bad or other")
+          }
+
+
+          //placeMarker(e.latLng);
         });
-        
+      }
+
+      function buttonCheck(a) {
+        inputType = a;
+        if(a == 1){
+            document.getElementById("bad").checked = false;
+            document.getElementById("other").checked = false;
+        }
+        else if(a == 2){
+            document.getElementById("good").checked = false;
+            document.getElementById("other").checked = false;
+        }
+        else if(a == 3){
+            document.getElementById("bad").checked = false;
+            document.getElementById("good").checked = false;
+        }
       }
 
     </script>
